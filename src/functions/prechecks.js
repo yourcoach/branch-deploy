@@ -493,8 +493,9 @@ export async function prechecks(context, octokit, data) {
 
     // If the mergeStateStatus is in DIRTY, alert and exit
   } else if (mergeStateStatus === 'DIRTY') {
-    message = `### ⚠️ Cannot proceed with deployment\n- mergeStateStatus: \`${mergeStateStatus}\`\n\n> A merge commit cannot be cleanly created`
-    return {message: message, status: false}
+    // We DO allow deploys even if the branch has merge conflicts
+    message = '✅ Proceeding with deployment despite merge conflicts'
+    core.info(message)
 
     // If everything is OK, print a nice message
   } else if (reviewDecision === 'APPROVED' && commitStatus === 'SUCCESS') {
